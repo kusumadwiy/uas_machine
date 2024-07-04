@@ -40,8 +40,8 @@ for col in X_train.columns:
         future_data_encoded[col] = 0
 
 future_sales = model.predict(future_data_encoded)
+print(f'Prediksi penjualan di bulan Februari 2024: {future_sales[0]}')
 
-        st.write(f'Prediksi penjualan: {future_sales[0]}')
     except ValueError as e:
         st.error(f"Error during encoding: {e}")
         st.write("Pastikan semua input sesuai dengan data yang digunakan saat training encoder.")
