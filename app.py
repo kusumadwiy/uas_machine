@@ -25,7 +25,7 @@ with st.form(key='prediction_form'):
 
 # Processing the input and making prediction
 if submit_button:
-    future_data = pd.DataFrame({
+    new_data = pd.DataFrame({
         'Month': [month],
         'Year': [year],
         'Gender': [gender],
@@ -35,16 +35,14 @@ if submit_button:
     })
 
     try:
-        # Encode categorical columns using encoder
-        encoded_columns = encoder.get_feature_names_out(input_features=['Gender', 'Product Category'])
-        encoded_future_data = encoder.transform(future_data[['Gender', 'Product Category']])
-        encoded_future_data = pd.DataFrame(encoded_future_data, columns=encoded_columns)
+        # Encode categorical columns using pandas.get_dummies
+        encoded_new_data = pd.get_dummies(new_data[['Gender', 'Product Category']], columns=['Gender', 'Product Category'], drop_first=True)
         
         # Concatenate numerical columns with encoded categorical columns
-        final_future_data = pd.concat([future_data[['Gender', 'Product Category']], encoded_future_data], axis=1)
+        final_new_data = pd.concat([new_data[['Month', 'Year', 'Age', 'Total Spending']], encoded_new_data], axis=1)
 
         # Lakukan prediksi dengan model
-        prediction = model.predict(final_future_data)
+        prediction = model.predict(final_new_data)
 
         st.write(f'Prediksi penjualan: {prediction[0]}')
     except ValueError as e:
