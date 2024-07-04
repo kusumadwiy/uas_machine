@@ -8,9 +8,6 @@ model = pickle.load(open('model.pkl', 'rb'))
 with open('encoder.pkl', 'rb') as encoder_file:
     encoder = pickle.load(encoder_file)
 
-imputer = SimpleImputer(strategy='most_frequent')
-X_imputed = imputer.fit_transform(X)
-
 st.title("Prediksi Penjualan Produk")
 
 st.write("Masukkan detail untuk mendapatkan prediksi penjualan:")
