@@ -47,6 +47,12 @@ if submit_button:
         prediction = model.predict(final_new_data)
 
         st.write(f'Prediksi penjualan: {prediction[0]}')
+        
     except ValueError as e:
+    # Handle unknown categories manually
+    unknown_categories = set(new_data['Gender']) - set(encoder.categories_[0])
+    if unknown_categories:
+        st.error(f"Unknown categories found: {unknown_categories}")
+    else:
         st.error(f"Error during encoding: {e}")
-        st.write("Pastikan semua input sesuai dengan data yang digunakan saat training encoder.")
+    st.write("Pastikan semua input sesuai dengan data yang digunakan saat training encoder.")
