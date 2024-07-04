@@ -34,12 +34,12 @@ if submit_button:
 
     try:
         # Encode categorical columns using encoder
+        encoded_new_data = encoder.transform(new_data[['Gender', 'Product Category']]).toarray()
         encoded_columns = encoder.get_feature_names_out(['Gender', 'Product Category'])
-        encoded_new_data = encoder.transform(new_data[['Gender', 'Product Category']])
         encoded_new_data = pd.DataFrame(encoded_new_data, columns=encoded_columns)
         
         # Concatenate numerical columns with encoded categorical columns
-        final_new_data = pd.concat([new_data[['Age', 'Quantity', 'Price per Unit']], encoded_new_data], axis=1)
+        final_new_data = pd.concat([new_data[['Age', 'Quantity', 'Price per Unit']].reset_index(drop=True), encoded_new_data.reset_index(drop=True)], axis=1)
 
         # Lakukan prediksi dengan model
         prediction = model.predict(final_new_data)
