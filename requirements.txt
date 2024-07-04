@@ -3,5 +3,3 @@ pip
 streamlit
 pandas
 scikit-learn==1.2.2
-pip install --upgrade streamlit
-
