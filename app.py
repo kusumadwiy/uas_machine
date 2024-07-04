@@ -18,7 +18,7 @@ with st.form(key='prediction_form'):
     age = st.number_input('Age', min_value=0, max_value=100, step=1)
     product_category = st.selectbox('Product Category', options=['Beauty', 'Clothing', 'Electronics'])
     quantity = st.number_input('Quantity', min_value=1, step=1)
-    price_per_unit = st.number_input('Price per Unit', min_value=1.0, step=0.01)
+    price_per_unit = st.number_input('Price per Unit', min_value=1, step=5)
     
     submit_button = st.form_submit_button(label='Predict')
 
