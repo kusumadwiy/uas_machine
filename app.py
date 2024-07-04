@@ -8,7 +8,10 @@ model = pickle.load(open('model.pkl', 'rb'))
 with open('encoder.pkl', 'rb') as encoder_file:
     encoder = pickle.load(encoder_file)
 
-st.title("Sales Prediction App")
+
+encoder = OneHotEncoder(sparse=False, drop='first', handle_unknown='ignore')
+
+st.title("Prediksi Penjualan Produk")
 
 st.write("Masukkan detail untuk mendapatkan prediksi penjualan:")
 
