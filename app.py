@@ -18,7 +18,7 @@ with st.form(key='prediction_form'):
     year = st.number_input('Year', min_value=2000, max_value=2100, step=1)
     gender = st.selectbox('Gender', options=['1', '3'])
     age = st.number_input('Age', min_value=0, max_value=100, step=5)
-    category = st.selectbox('Product Category', options=['Beauty', 'Clothing', 'Electronics'])
+    category = st.selectbox('Product Category', options=['1', '2', '3'])
     spending = st.number_input('Total Spending', min_value=100, step=20)
     
     submit_button = st.form_submit_button(label='Predict')
