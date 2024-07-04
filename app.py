@@ -47,4 +47,4 @@ if submit_button:
         
     except ValueError as e:
         st.error(f"Error during encoding: {e}")
-    st.write("Pastikan semua input sesuai dengan data yang digunakan saat training encoder.")
+    st.write("Error")
