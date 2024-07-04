@@ -1,5 +1,7 @@
 import streamlit as st
 import pickle
+from sklearn.preprocessing import OneHotEncoder
+import numpy as np
 import pandas as pd
 
 # Load model dan encoder dari file
