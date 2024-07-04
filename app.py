@@ -49,8 +49,5 @@ if submit_button:
         st.write(f'Prediksi penjualan: {prediction[0]}')
         
     except ValueError as e:
-    if unknown_categories:
-        st.error(f"Unknown categories found: {unknown_categories}")
-    else:
         st.error(f"Error during encoding: {e}")
     st.write("Pastikan semua input sesuai dengan data yang digunakan saat training encoder.")
