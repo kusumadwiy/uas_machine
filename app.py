@@ -34,12 +34,16 @@ if submit_button:
         'Total Spending': [spending]
     })
 
-    # Encode data baru dengan encoder yang sama
-    encoded_new_data = encoder.transform(new_data[['Gender', 'Product Category']])
-    encoded_new_data = pd.DataFrame(encoded_new_data, columns=encoder.get_feature_names_out(['Gender', 'Product Category']))
-    final_new_data = pd.concat([new_data[['Month', 'Year', 'Age', 'Total Spending']], encoded_new_data], axis=1)
+    try:
+        # Encode data baru dengan encoder yang sama
+        encoded_new_data = encoder.transform(new_data[['Gender', 'Product Category']])
+        encoded_new_data = pd.DataFrame(encoded_new_data, columns=encoder.get_feature_names_out(['Gender', 'Product Category']))
+        final_new_data = pd.concat([new_data[['Month', 'Year', 'Age', 'Total Spending']], encoded_new_data], axis=1)
 
-    # Lakukan prediksi dengan model
-    prediction = model.predict(final_new_data)
+        # Lakukan prediksi dengan model
+        prediction = model.predict(final_new_data)
 
-    st.write(f'Prediksi penjualan: {prediction[0]}')
+        st.write(f'Prediksi penjualan: {prediction[0]}')
+    except ValueError as e:
+        st.error(f"Error during encoding: {e}")
+        st.write("Pastikan semua input sesuai dengan data yang digunakan saat training encoder.")
