@@ -34,7 +34,7 @@ if submit_button:
 
     try:
         # Encode categorical columns using encoder
-        encoded_new_data = encoder.transform(new_data[['Gender', 'Product Category']])()
+        encoded_new_data = encoder.transform(new_data[['Gender', 'Product Category']])
         encoded_columns = encoder.get_feature_names_out(['Gender', 'Product Category'])
         encoded_new_data = pd.DataFrame(encoded_new_data, columns=encoded_columns)
         
