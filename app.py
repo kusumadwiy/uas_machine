@@ -36,7 +36,7 @@ if submit_button:
 
     try:
         # Encode categorical columns using pandas.get_dummies
-        encoded_new_data = pd.get_dummies(new_data[['Gender', 'Category']], columns=['Gender', 'Category'], drop_first=True)
+        encoded_new_data = pd.get_dummies(new_data[['Gender', 'Product Category']], columns=['Gender', 'Product Category'], drop_first=True)
         
         # Concatenate numerical columns with encoded categorical columns
         final_new_data = pd.concat([new_data[['Month', 'Year', 'Age', 'Total Spending']], encoded_new_data], axis=1)
