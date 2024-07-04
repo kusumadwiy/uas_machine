@@ -23,28 +23,25 @@ with st.form(key='prediction_form'):
     
     submit_button = st.form_submit_button(label='Predict')
 
-# Processing the input and making prediction
-if submit_button:
-    future_data = pd.DataFrame({
-        'Month': [month],
-        'Year': [year],
-        'Gender': [gender],
-        'Age': [age],
-        'Product Category': [category],
-        'Total Spending': [spending]
-    })
+# Memprediksi Penjualan di Masa Depan
+# Contoh data untuk prediksi masa depan
+future_data = pd.DataFrame({
+    'Month': [2],
+    'Year': [2024],
+    'Gender': ['Female'],
+    'Age': [30],
+    'Product Category': ['Beauty'],
+    'Total Spending': [200]
+})
+future_data_encoded = pd.get_dummies(future_data, columns=['Gender', 'Product Category'], drop_first=True)
+# Pastikan urutan kolom sama dengan data latih
+for col in X_train.columns:
+    if col not in future_data_encoded.columns:
+        future_data_encoded[col] = 0
 
-    try:
-        # Encode categorical columns using encoder
-        encoded_columns = encoder.get_feature_names_out(input_features=['Gender', 'Product Category'])
-        encoded_future_data = encoder.transform(future_data[['Gender', 'Product Category']])
-        encoded_future_data = pd.DataFrame(encoded_future_data, columns=encoded_columns)
-        
-        # Concatenate numerical columns with encoded categorical columns
-        final_future_data = pd.concat([future_data[['Gender', 'Product Category']], encoded_future_data], axis=1)
+future_sales = model.predict(future_data_encoded)
+print(f'Prediksi penjualan di bulan Februari 2024: {future_sales[0]}')
 
-        # Lakukan prediksi dengan model
-        prediction = model.predict(final_future_data)
 
         st.write(f'Prediksi penjualan: {prediction[0]}')
     except ValueError as e:
