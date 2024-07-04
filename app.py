@@ -8,6 +8,17 @@ model = pickle.load(open('model.pkl', 'rb'))
 with open('encoder.pkl', 'rb') as encoder_file:
     encoder = pickle.load(encoder_file)
 
+def get_feature_names(encoder, feature_names):
+    """
+    Create feature names for OneHotEncoder output.
+    """
+    feature_indices = encoder.feature_indices_
+    result = []
+    for category, i in zip(feature_names, range(len(feature_names))):
+        for k in range(feature_indices[i], feature_indices[i+1]):
+            result.append(f'{category}_{encoder.categories_[i][k-feature_indices[i]]}')
+    return result
+
 st.title("Sales Prediction App")
 
 st.write("Masukkan detail untuk mendapatkan prediksi penjualan:")
@@ -43,7 +54,7 @@ if submit_button:
             encoded_columns = encoder.get_feature_names_out(['Gender', 'Product Category'])
         else:
             # Handle versions where get_feature_names_out might not be available
-            encoded_columns = encoder.get_feature_names(['Gender', 'Product Category'])
+            encoded_columns = get_feature_names(encoder, ['Gender', 'Product Category'])
         
         encoded_new_data = pd.DataFrame(encoded_new_data, columns=encoded_columns)
         final_new_data = pd.concat([new_data[['Month', 'Year', 'Age', 'Total Spending']], encoded_new_data], axis=1)
