@@ -49,12 +49,8 @@ if submit_button:
         # Encode data baru dengan encoder yang sama
         encoded_new_data = encoder.transform(new_data[['Gender', 'Product Category']])
         
-        # Retrieve the feature names
-        if hasattr(encoder, 'get_feature_names_out'):
-            encoded_columns = encoder.get_feature_names_out(['Gender', 'Product Category'])
-        else:
-            # Handle versions where get_feature_names_out might not be available
-            encoded_columns = get_feature_names(encoder, ['Gender', 'Product Category'])
+        # Retrieve the feature names using custom function
+        encoded_columns = get_feature_names(encoder, ['Gender', 'Product Category'])
         
         encoded_new_data = pd.DataFrame(encoded_new_data, columns=encoded_columns)
         final_new_data = pd.concat([new_data[['Month', 'Year', 'Age', 'Total Spending']], encoded_new_data], axis=1)
