@@ -18,7 +18,7 @@ with st.form(key='prediction_form'):
     year = st.number_input('Year', min_value=2000, max_value=2100, step=1)
     gender = st.selectbox('Gender', options=['Male', 'Female'])
     age = st.number_input('Age', min_value=0, max_value=100, step=1)
-    category = st.selectbox('Product Category', options=['Beauty', 'Category2', 'Category3'])
+    category = st.selectbox('Product Categor', options=['Beauty', 'Clothing', 'Electronics'])
     spending = st.number_input('Total Spending', min_value=100, step=50)
     
     submit_button = st.form_submit_button(label='Predict')
@@ -36,7 +36,7 @@ if submit_button:
 
     try:
         # Encode categorical columns using pandas.get_dummies
-        encoded_new_data = pd.get_dummies(new_data[['Gender', 'Product Category']], columns=['Gender', 'Product Category'], drop_first=True)
+        encoded_new_data = pd.get_dummies(new_data[['Gender', 'Category']], columns=['Gender', 'Category'], drop_first=True)
         
         # Concatenate numerical columns with encoded categorical columns
         final_new_data = pd.concat([new_data[['Month', 'Year', 'Age', 'Total Spending']], encoded_new_data], axis=1)
