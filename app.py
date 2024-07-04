@@ -1,8 +1,6 @@
-from flask import Flask, render_template, request
+import streamlit as st
 import pickle
 import pandas as pd
-
-app = Flask(__name__)
 
 # Load model dan encoder dari file
 model = pickle.load(open('model.pkl', 'rb'))
@@ -10,20 +8,23 @@ model = pickle.load(open('model.pkl', 'rb'))
 with open('encoder.pkl', 'rb') as encoder_file:
     encoder = pickle.load(encoder_file)
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+st.title("Sales Prediction App")
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    month = int(request.form['month'])
-    year = int(request.form['year'])
-    gender = request.form['gender']
-    age = int(request.form['age'])
-    category = request.form['category']
-    spending = float(request.form['spending'])
+st.write("Masukkan detail untuk mendapatkan prediksi penjualan:")
 
-    # Buat data baru berdasarkan input
+# Input form
+with st.form(key='prediction_form'):
+    month = st.number_input('Month', min_value=1, max_value=12, step=1)
+    year = st.number_input('Year', min_value=2000, max_value=2100, step=1)
+    gender = st.selectbox('Gender', options=['Male', 'Female'])
+    age = st.number_input('Age', min_value=0, max_value=100, step=1)
+    category = st.selectbox('Product Category', options=['Category1', 'Category2', 'Category3'])
+    spending = st.number_input('Total Spending', min_value=0.0, step=0.01)
+    
+    submit_button = st.form_submit_button(label='Predict')
+
+# Processing the input and making prediction
+if submit_button:
     new_data = pd.DataFrame({
         'Month': [month],
         'Year': [year],
@@ -38,13 +39,7 @@ def predict():
     encoded_new_data = pd.DataFrame(encoded_new_data, columns=encoder.get_feature_names_out(['Gender', 'Product Category']))
     final_new_data = pd.concat([new_data[['Month', 'Year', 'Age', 'Total Spending']], encoded_new_data], axis=1)
 
-
-
     # Lakukan prediksi dengan model
     prediction = model.predict(final_new_data)
 
-    return render_template('index.html', prediction=f'Prediksi penjualan: {prediction[0]}')
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    st.write(f'Prediksi penjualan: {prediction[0]}')
