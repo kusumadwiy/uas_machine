@@ -28,18 +28,18 @@ if submit_button:
     new_data = pd.DataFrame({
         'Month': [month],
         'Year': [year],
-        'Gender': [gender],  # Use the string values directly
+        'Gender': [gender],
         'Age': [age],
-        'Product Category': [category],  # Use the string values directly
+        'Product Category': [category],
         'Total Spending': [spending]
     })
 
     # Convert all columns to the appropriate data types
     new_data['Month'] = new_data['Month'].astype(int)
     new_data['Year'] = new_data['Year'].astype(int)
-    new_data['Gender'] = new_data['Gender'].astype(str)  # Ensure Gender is a string
+    new_data['Gender'] = new_data['Gender'].astype(str)
     new_data['Age'] = new_data['Age'].astype(int)
-    new_data['Product Category'] = new_data['Product Category'].astype(str)  # Ensure Product Category is a string
+    new_data['Product Category'] = new_data['Product Category'].astype(str)
     new_data['Total Spending'] = new_data['Total Spending'].astype(float)
 
     # Check for NaN values and handle them
@@ -48,17 +48,17 @@ if submit_button:
     else:
         try:
             # Encode data baru dengan encoder yang sama
-            encoded_new_data = encoder.transform(new_data[['Gender', 'Product Category']])
-            
-            # Get the column names for the encoded features
+            encoded_features = encoder.transform(new_data[['Gender', 'Product Category']])
+
+            # Dapatkan nama kolom untuk fitur yang dikodekan
             gender_columns = [f'Gender_{category}' for category in encoder.categories_[0]]
             category_columns = [f'Product Category_{category}' for category in encoder.categories_[1]]
             encoded_columns = gender_columns + category_columns
             
-            # Create a DataFrame with encoded features
-            encoded_new_data = pd.DataFrame(encoded_new_data, columns=encoded_columns)
+            # Buat DataFrame dengan fitur yang dikodekan
+            encoded_new_data = pd.DataFrame(encoded_features, columns=encoded_columns)
             
-            # Combine with the original data
+            # Gabungkan dengan data asli
             final_new_data = pd.concat([new_data[['Month', 'Year', 'Age', 'Total Spending']], encoded_new_data], axis=1)
 
             # Lakukan prediksi dengan model
