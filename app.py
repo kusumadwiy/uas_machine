@@ -39,6 +39,14 @@ if submit_button:
         'Total Spending': [spending]
     })
 
+    # Convert all columns to the appropriate data types
+    new_data['Month'] = new_data['Month'].astype(int)
+    new_data['Year'] = new_data['Year'].astype(int)
+    new_data['Gender'] = new_data['Gender'].astype(int)
+    new_data['Age'] = new_data['Age'].astype(int)
+    new_data['Product Category'] = new_data['Product Category'].astype(str)
+    new_data['Total Spending'] = new_data['Total Spending'].astype(float)
+
     try:
         # Encode data baru dengan encoder yang sama
         encoded_new_data = encoder.transform(new_data[['Gender', 'Product Category']])
