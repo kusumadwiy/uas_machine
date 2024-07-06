@@ -52,6 +52,13 @@ if submit_button:
         st.error("Input data contains NaN values. Please check your input.")
     else:
         try:
+            # Check the categories recognized by the encoder
+            gender_categories = encoder.categories_[encoder.feature_names_in_.tolist().index('Gender')]
+            category_categories = encoder.categories_[encoder.feature_names_in_.tolist().index('Product Category')]
+
+            st.write(f"Recognized Gender categories: {gender_categories}")
+            st.write(f"Recognized Product Category categories: {category_categories}")
+
             # Encode data baru dengan encoder yang sama
             encoded_new_data = encoder.transform(new_data[['Gender', 'Product Category']])
             encoded_new_data = pd.DataFrame(encoded_new_data, columns=encoder.get_feature_names_out(['Gender', 'Product Category']))
