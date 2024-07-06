@@ -1,6 +1,7 @@
 import streamlit as st
 import pickle
 import pandas as pd
+from sklearn.preprocessing import OneHotEncoder
 
 # Load model dan encoder dari file
 model = pickle.load(open('model.pkl', 'rb'))
@@ -47,31 +48,31 @@ if submit_button:
         st.error("Input data contains NaN values. Please check your input.")
     else:
         try:
-            # Encode data baru dengan encoder yang sama
-            encoded_features = encoder.transform(new_data[['Gender', 'Product Category']])
+            # Ensure all categories are present in the data to be encoded
+            all_categories = pd.DataFrame({
+                'Gender': ['Male', 'Female'],
+                'Product Category': ['Beauty', 'Clothing', 'Electronics']
+            })
 
-            # Debugging: Check shape of encoded features
-            st.write(f"Shape of encoded features: {encoded_features.shape}")
+            # Concatenate the new data with all possible categories to ensure encoder has all categories
+            new_data_extended = pd.concat([new_data, all_categories], axis=0, ignore_index=True)
+
+            # Encode the extended data
+            encoded_features = encoder.transform(new_data_extended[['Gender', 'Product Category']])
+
+            # Remove the extra rows used for encoding
+            encoded_features = encoded_features[:len(new_data)]
 
             # Dapatkan nama kolom untuk fitur yang dikodekan
             gender_columns = [f'Gender_{category}' for category in encoder.categories_[0]]
             category_columns = [f'Product Category_{category}' for category in encoder.categories_[1]]
             encoded_columns = gender_columns + category_columns
 
-            # Debugging: Check encoded columns
-            st.write(f"Encoded columns: {encoded_columns}")
-
             # Buat DataFrame dengan fitur yang dikodekan
             encoded_new_data = pd.DataFrame(encoded_features, columns=encoded_columns)
 
-            # Debugging: Check shape of encoded new data
-            st.write(f"Shape of encoded new data: {encoded_new_data.shape}")
-
             # Gabungkan dengan data asli
             final_new_data = pd.concat([new_data[['Month', 'Year', 'Age', 'Total Spending']], encoded_new_data], axis=1)
-
-            # Debugging: Check final new data
-            st.write(f"Final new data:\n{final_new_data}")
 
             # Lakukan prediksi dengan model
             prediction = model.predict(final_new_data)
