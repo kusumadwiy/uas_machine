@@ -49,11 +49,16 @@ if submit_button:
         try:
             # Encode data baru dengan encoder yang sama
             encoded_new_data = encoder.transform(new_data[['Gender', 'Product Category']])
-            # Use get_feature_names if get_feature_names_out is not available
-            try:
-                encoded_new_data = pd.DataFrame(encoded_new_data, columns=encoder.get_feature_names_out(['Gender', 'Product Category']))
-            except AttributeError:
-                encoded_new_data = pd.DataFrame(encoded_new_data, columns=encoder.get_feature_names(['Gender', 'Product Category']))
+            
+            # Get the column names for the encoded features
+            gender_columns = [f'Gender_{category}' for category in encoder.categories_[0]]
+            category_columns = [f'Product Category_{category}' for category in encoder.categories_[1]]
+            encoded_columns = gender_columns + category_columns
+            
+            # Create a DataFrame with encoded features
+            encoded_new_data = pd.DataFrame(encoded_new_data, columns=encoded_columns)
+            
+            # Combine with the original data
             final_new_data = pd.concat([new_data[['Month', 'Year', 'Age', 'Total Spending']], encoded_new_data], axis=1)
 
             # Lakukan prediksi dengan model
