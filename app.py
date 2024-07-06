@@ -69,10 +69,13 @@ if submit_button:
             encoded_columns = gender_columns + category_columns
 
             # Buat DataFrame dengan fitur yang dikodekan
-            encoded_new_data = pd.DataFrame(encoded_features, columns=encoded_columns)
+            encoded_new_data = pd.DataFrame(encoded_features, columns=encoded_columns, index=new_data.index)
 
             # Gabungkan dengan data asli
             final_new_data = pd.concat([new_data[['Month', 'Year', 'Age', 'Total Spending']], encoded_new_data], axis=1)
+
+            # Debugging: Check final new data
+            st.write(f"Final new data:\n{final_new_data}")
 
             # Lakukan prediksi dengan model
             prediction = model.predict(final_new_data)
