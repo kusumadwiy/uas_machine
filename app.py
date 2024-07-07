@@ -49,29 +49,25 @@ if submit_button:
         try:
             # Encode data baru dengan encoder yang sama
             encoded_features = encoder.transform(new_data[['Gender', 'Product Category']])
-
-            # Debugging: Check shape of encoded features
-            st.write(f"Shape of encoded features: {encoded_features.shape}")
-
+            
             # Dapatkan nama kolom untuk fitur yang dikodekan
             gender_columns = [f'Gender_{category}' for category in encoder.categories_[0]]
             category_columns = [f'Product Category_{category}' for category in encoder.categories_[1]]
             encoded_columns = gender_columns + category_columns
-
-            # Debugging: Check encoded columns
-            st.write(f"Encoded columns: {encoded_columns}")
-
+            
             # Buat DataFrame dengan fitur yang dikodekan
             encoded_new_data = pd.DataFrame(encoded_features, columns=encoded_columns)
 
-            # Debugging: Check shape of encoded new data
-            st.write(f"Shape of encoded new data: {encoded_new_data.shape}")
+            # Pastikan semua kolom ada, jika tidak, tambahkan kolom dengan nilai nol
+            for col in encoded_columns:
+                if col not in encoded_new_data:
+                    encoded_new_data[col] = 0
 
             # Gabungkan dengan data asli
             final_new_data = pd.concat([new_data[['Month', 'Year', 'Age', 'Total Spending']], encoded_new_data], axis=1)
 
-            # Debugging: Check final new data
-            st.write(f"Final new data:\n{final_new_data}")
+            # Sesuaikan urutan kolom sesuai dengan urutan yang digunakan saat pelatihan model
+            final_new_data = final_new_data[['Month', 'Year', 'Age', 'Total Spending'] + encoded_columns]
 
             # Lakukan prediksi dengan model
             prediction = model.predict(final_new_data)
