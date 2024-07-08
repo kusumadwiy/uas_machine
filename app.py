@@ -2,13 +2,14 @@ import streamlit as st
 import pandas as pd
 import pickle
 
-def load_model('modelfixx.pkl'):
-    model = pickle.load('modelfixx.pkl')
+# Function to load the model
+def load_model(model_path):
+    model = pickle.load(model_path)
     return model
 
+# Load the saved model
 model_path = 'modelfixx.pkl'  # Sesuaikan dengan nama file model Anda dan path
-model = load_model('modelfixx.pkl')
-
+model = load_model(model_path)
 
 # Function to predict
 def predict(model, input_data):
