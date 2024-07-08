@@ -45,7 +45,7 @@ with st.form(key='prediction_form'):
     product_category = st.selectbox('Kategori Produk', options=['Beauty', 'Clothing', 'Electronics'])
     month = st.number_input('Bulan', min_value=1, max_value=12, step=1)
     year = st.number_input('Tahun', min_value=2000, max_value=2100, step=1)
-    total_spending = st.number_input('Total Spending', min_value=50, max_value=1000, step=100
+    total_spending = st.number_input('Total Spending', min_value=50, max_value=1000, step=100)
     submit_button = st.form_submit_button(label='Predict')
 
 # Memproses prediksi ketika tombol submit ditekan
