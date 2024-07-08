@@ -1,10 +1,11 @@
 import streamlit as st
 import pandas as pd
 import pickle
+import joblib
 
 # Memuat model dari file model.pkl
 with open('modelfixx.pkl', 'rb') as file:
-    model = pickle.load(file)
+    model = joblib.load(file)
 
 # Judul dan deskripsi aplikasi
 st.title('Prediksi Penjualan di Masa Depan')
