@@ -3,7 +3,7 @@ import pandas as pd
 import pickle
 
 # Memuat model dari file model.pkl
-with open('modelfixx.pkl', 'rb') as file:
+with open('modelfixx12.pkl', 'rb') as file:
     model = pickle.load(file)
 
 # Judul dan deskripsi aplikasi
