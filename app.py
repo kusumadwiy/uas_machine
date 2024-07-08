@@ -19,7 +19,7 @@ def predict_sales(month,  year, gender, age, product_category, total_spending):
     # Buat data input untuk prediksi
     input_data = {
         'Month': [month],
-        'Year': [year]
+        'Year': [year],
         'Gender': [gender_num],
         'Age': [age],
         'Product Category': [product_category_num],
