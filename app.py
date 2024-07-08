@@ -2,52 +2,53 @@ import streamlit as st
 import pandas as pd
 import pickle
 
-# Function to load the model
-def load_model(model_path):
-    with open(model_path, 'rb') as file:
-        model = pickle.load(file)
-    return model
+# Memuat model dari file model.pkl
+with open('modellfixx.pkl', 'rb') as file:
+    model = pickle.load(file)
 
-# Load the saved model
-model_path = 'modelfixx.pkl'  # Sesuaikan dengan nama file model Anda dan path
-model = load_model(model_path)
+# Judul dan deskripsi aplikasi
+st.title('Prediksi Penjualan')
+st.write('Prediksi')
 
-# Function to predict
-def predict(model, input_data):
-    prediction = model.predict(input_data)
-    return prediction
-
-# Streamlit App
-def main():
-    st.title('Sales Prediction App')
-    st.sidebar.title('Input Parameters')
-
-    # Input form for user
-    month = st.sidebar.selectbox('Month', range(1, 13))
-    year = st.sidebar.selectbox('Year', range(2000, 2025))
-    gender = st.sidebar.selectbox('Gender', ['Male', 'Female'])
-    age = st.sidebar.number_input('Age', min_value=18, max_value=100)
-    product_category = st.sidebar.selectbox('Product Category', ['Beauty', 'Clothing', 'Electronics'])
-    total_spending = st.sidebar.number_input('Total Spending')
-
-    # Prepare input data as DataFrame
+# Fungsi untuk melakukan prediksi total penjualan
+def predict_sales(month,  year, gender, age, product_category, total_spending):
+    # Transformasi input menjadi nilai numerik yang sesuai
+    gender_num = 2 if gender.lower() == 'female' else 1
+    product_category_num = 1 if product_category.lower() == 'beauty' else 2 if product_category.lower() == 'clothing' else 3
+    
+    # Buat data input untuk prediksi
     input_data = {
         'Month': [month],
-        'Year': [year],
-        'Gender': [gender],
+        'Year': [year]
+        'Gender': [gender_num],
         'Age': [age],
-        'Product Category': [product_category],
+        'Product Category': [product_category_num],
         'Total Spending': [total_spending]
     }
+    
+    # Buat DataFrame dari data input
     input_df = pd.DataFrame(input_data)
+    
+    # Debugging: cetak DataFrame input
+    st.write('DataFrame Input untuk Prediksi:')
+    st.write(input_df)
+    
+    # Lakukan prediksi menggunakan model
+    predicted_sales = model.predict(input_df)
+    
+    return predicted_sales[0]
 
-    # Encoding categorical variables
-    input_encoded = pd.get_dummies(input_df, columns=['Gender', 'Product Category'], drop_first=False)
+# Form input untuk prediksi
+with st.form(key='prediction_form'):
+    month = st.number_input('Bulan', min_value=1, max_value=12, step=1)
+    year = st.number_input('Tahun', min_value=2000, max_value=2100, step=1) 
+    gender = st.selectbox('Gender', options=['Male', 'Female'])
+    age = st.number_input('Usia', min_value=0, max_value=100, step=5)
+    product_category = st.selectbox('Kategori Produk', options=['Beauty', 'Clothing', 'Electronics'])
+    total_spending = st.number_input('Total Spending', min_value=100, max_value=5000, step=10)
+    submit_button = st.form_submit_button(label='Predict')
 
-    # Predict using the model
-    if st.sidebar.button('Predict'):
-        prediction = predict(model, input_encoded)
-        st.sidebar.success(f'Predicted Total Amount: ${prediction[0]:,.2f}')
-
-if __name__ == '__main__':
-    main()
+# Memproses prediksi ketika tombol submit ditekan
+if submit_button:
+    predicted_sales = predict_sales(month, year, gender, age, product_category, total_spending)
+    st.write(f'Prediksi Total Penjualan: {predicted_sales}')
